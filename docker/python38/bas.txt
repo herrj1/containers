@@ -1,0 +1,32 @@
+# run: docker build -t service -f service.Dockerfile .
+# set base image (host OS)
+FROM python:3.8
+
+RUN \
+    useradd john \
+    && mkdir /home/john \
+    && chown john:john /home/john \
+    && pip3 install \
+    ipython \
+    scikit-learn \
+		numpy \
+    pandas \
+    matplotlib \
+    jupyter \
+		flask \
+		flask-sqlalchemy \
+		marshmallow \
+		marshmallow_sqlalchemy \
+		pymysql \
+
+# set the working directory in the container
+WORKDIR /home/john/app
+
+#set user
+USER john
+
+# copy the content of the local src directory to the working directory
+COPY app/ .
+
+# command to run on container start
+CMD [ "python", "./app.py" ]
